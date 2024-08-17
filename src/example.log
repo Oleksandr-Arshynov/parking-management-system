@@ -1,0 +1,70 @@
+2024-05-07 14:00:08,745 - CRITICAL - UploadFile(filename='new_photo.jpg', size=76900, headers=Headers({'content-disposition': 'form-data; name="file"; filename="new_photo.jpg"', 'content-type': 'image/jpeg'}))
+2024-05-07 14:00:08,745 - CRITICAL - 2
+2024-05-07 14:00:08,746 - CRITICAL - test
+2024-05-07 14:00:08,746 - CRITICAL - ['1,2,3,4,5']
+2024-05-07 14:00:09,888 - CRITICAL - https://res.cloudinary.com/dcluqr6zi/image/upload/v1715079609/uploads/1/d56a83c6-ec41-44d3-8e3c-53c9c055e85e.jpg
+2024-05-07 14:00:09,896 - CRITICAL - UploadFile(filename='upload', size=0, headers=Headers({'content-disposition': 'form-data; name="file"; filename="upload"', 'content-type': 'application/octet-stream'}))
+2024-05-07 14:00:09,896 - CRITICAL - 2
+2024-05-07 14:00:09,896 - CRITICAL - new
+2024-05-07 14:00:09,896 - CRITICAL - ['6,7,8,9,10']
+2024-05-07 14:00:09,939 - CRITICAL - https://res.cloudinary.com/dcluqr6zi/image/upload/v1715079609/uploads/1/d56a83c6-ec41-44d3-8e3c-53c9c055e85e.jpg
+2024-05-07 14:03:48,820 - CRITICAL - UploadFile(filename='new_photo.jpg', size=76900, headers=Headers({'content-disposition': 'form-data; name="file"; filename="new_photo.jpg"', 'content-type': 'image/jpeg'}))
+2024-05-07 14:03:48,821 - CRITICAL - 2
+2024-05-07 14:03:48,822 - CRITICAL - test
+2024-05-07 14:03:48,822 - CRITICAL - ['1,2,3,4,5']
+2024-05-07 14:03:50,317 - CRITICAL - https://res.cloudinary.com/dcluqr6zi/image/upload/v1715079829/uploads/1/8aa60097-e1da-4d35-94a1-7bc52621f1e8.jpg
+2024-05-07 14:03:50,326 - CRITICAL - UploadFile(filename='upload', size=0, headers=Headers({'content-disposition': 'form-data; name="file"; filename="upload"', 'content-type': 'application/octet-stream'}))
+2024-05-07 14:03:50,327 - CRITICAL - 2
+2024-05-07 14:03:50,327 - CRITICAL - new
+2024-05-07 14:03:50,327 - CRITICAL - ['6,7,8,9,10']
+2024-05-07 14:03:50,373 - CRITICAL - https://res.cloudinary.com/dcluqr6zi/image/upload/v1715079829/uploads/1/8aa60097-e1da-4d35-94a1-7bc52621f1e8.jpg
+2024-05-07 16:38:18,170 - CRITICAL - UploadFile(filename='new_photo.jpg', size=76900, headers=Headers({'content-disposition': 'form-data; name="file"; filename="new_photo.jpg"', 'content-type': 'image/jpeg'}))
+2024-05-07 16:38:18,171 - CRITICAL - 2
+2024-05-07 16:38:18,171 - CRITICAL - test
+2024-05-07 16:38:18,171 - CRITICAL - ['1,2,3,4,5']
+2024-05-07 16:38:19,168 - CRITICAL - https://res.cloudinary.com/dcluqr6zi/image/upload/v1715089098/uploads/1/8f304dee-6a75-4216-b443-ff6cef404349.jpg
+2024-05-07 16:38:19,179 - CRITICAL - UploadFile(filename='upload', size=0, headers=Headers({'content-disposition': 'form-data; name="file"; filename="upload"', 'content-type': 'application/octet-stream'}))
+2024-05-07 16:38:19,179 - CRITICAL - 2
+2024-05-07 16:38:19,180 - CRITICAL - new
+2024-05-07 16:38:19,180 - CRITICAL - ['6,7,8,9,10']
+2024-05-07 16:38:19,227 - CRITICAL - https://res.cloudinary.com/dcluqr6zi/image/upload/v1715089098/uploads/1/8f304dee-6a75-4216-b443-ff6cef404349.jpg
+2024-05-07 16:39:48,398 - CRITICAL - UploadFile(filename='new_photo.jpg', size=76900, headers=Headers({'content-disposition': 'form-data; name="file"; filename="new_photo.jpg"', 'content-type': 'image/jpeg'}))
+2024-05-07 16:39:48,399 - CRITICAL - 2
+2024-05-07 16:39:48,399 - CRITICAL - test
+2024-05-07 16:39:48,399 - CRITICAL - ['1,2,3,4,5']
+2024-05-07 16:39:50,116 - CRITICAL - https://res.cloudinary.com/dcluqr6zi/image/upload/v1715089189/uploads/1/8e6faf3f-03a4-451c-81a8-227cf03c4235.jpg
+2024-05-07 16:39:50,129 - CRITICAL - UploadFile(filename='upload', size=0, headers=Headers({'content-disposition': 'form-data; name="file"; filename="upload"', 'content-type': 'application/octet-stream'}))
+2024-05-07 16:39:50,129 - CRITICAL - 2
+2024-05-07 16:39:50,129 - CRITICAL - new
+2024-05-07 16:39:50,130 - CRITICAL - ['6,7,8,9,10']
+2024-05-07 16:39:50,179 - CRITICAL - https://res.cloudinary.com/dcluqr6zi/image/upload/v1715089189/uploads/1/8e6faf3f-03a4-451c-81a8-227cf03c4235.jpg
+2024-05-07 16:41:38,937 - CRITICAL - UploadFile(filename='new_photo.jpg', size=76900, headers=Headers({'content-disposition': 'form-data; name="file"; filename="new_photo.jpg"', 'content-type': 'image/jpeg'}))
+2024-05-07 16:41:38,938 - CRITICAL - 2
+2024-05-07 16:41:38,939 - CRITICAL - test
+2024-05-07 16:41:38,939 - CRITICAL - ['1,2,3,4,5']
+2024-05-07 16:41:40,476 - CRITICAL - https://res.cloudinary.com/dcluqr6zi/image/upload/v1715089299/uploads/1/03f0189f-3ad0-4cc9-9577-453122b8ed71.jpg
+2024-05-07 16:41:40,497 - CRITICAL - UploadFile(filename='upload', size=0, headers=Headers({'content-disposition': 'form-data; name="file"; filename="upload"', 'content-type': 'application/octet-stream'}))
+2024-05-07 16:41:40,497 - CRITICAL - 2
+2024-05-07 16:41:40,497 - CRITICAL - new
+2024-05-07 16:41:40,498 - CRITICAL - ['6,7,8,9,10']
+2024-05-07 16:41:40,561 - CRITICAL - https://res.cloudinary.com/dcluqr6zi/image/upload/v1715089299/uploads/1/03f0189f-3ad0-4cc9-9577-453122b8ed71.jpg
+2024-05-07 16:42:15,551 - CRITICAL - UploadFile(filename='new_photo.jpg', size=76900, headers=Headers({'content-disposition': 'form-data; name="file"; filename="new_photo.jpg"', 'content-type': 'image/jpeg'}))
+2024-05-07 16:42:15,552 - CRITICAL - 2
+2024-05-07 16:42:15,552 - CRITICAL - test
+2024-05-07 16:42:15,552 - CRITICAL - ['1,2,3,4,5']
+2024-05-07 16:42:16,780 - CRITICAL - https://res.cloudinary.com/dcluqr6zi/image/upload/v1715089336/uploads/1/3b844535-5c88-4a7b-b3f1-e8acf8fa2b93.jpg
+2024-05-07 16:42:16,800 - CRITICAL - UploadFile(filename='upload', size=0, headers=Headers({'content-disposition': 'form-data; name="file"; filename="upload"', 'content-type': 'application/octet-stream'}))
+2024-05-07 16:42:16,800 - CRITICAL - 2
+2024-05-07 16:42:16,800 - CRITICAL - new
+2024-05-07 16:42:16,800 - CRITICAL - ['6,7,8,9,10']
+2024-05-07 16:42:16,873 - CRITICAL - https://res.cloudinary.com/dcluqr6zi/image/upload/v1715089336/uploads/1/3b844535-5c88-4a7b-b3f1-e8acf8fa2b93.jpg
+2024-05-07 16:45:47,899 - CRITICAL - UploadFile(filename='new_photo.jpg', size=76900, headers=Headers({'content-disposition': 'form-data; name="file"; filename="new_photo.jpg"', 'content-type': 'image/jpeg'}))
+2024-05-07 16:45:47,900 - CRITICAL - 2
+2024-05-07 16:45:47,900 - CRITICAL - test
+2024-05-07 16:45:47,900 - CRITICAL - ['1,2,3,4,5']
+2024-05-07 16:45:49,120 - CRITICAL - https://res.cloudinary.com/dcluqr6zi/image/upload/v1715089548/uploads/1/ef1542e9-920e-410a-8aaa-9a90cfb856b5.jpg
+2024-05-07 16:45:49,131 - CRITICAL - UploadFile(filename='upload', size=0, headers=Headers({'content-disposition': 'form-data; name="file"; filename="upload"', 'content-type': 'application/octet-stream'}))
+2024-05-07 16:45:49,132 - CRITICAL - 2
+2024-05-07 16:45:49,132 - CRITICAL - new
+2024-05-07 16:45:49,132 - CRITICAL - ['6,7,8,9,10']
+2024-05-07 16:45:49,178 - CRITICAL - https://res.cloudinary.com/dcluqr6zi/image/upload/v1715089548/uploads/1/ef1542e9-920e-410a-8aaa-9a90cfb856b5.jpg
