@@ -1,5 +1,5 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, String, DateTime, func, ForeignKey, Boolean, Numeric, Interval
+from sqlalchemy import Column, Integer, String, Float, DateTime, func, ForeignKey, Boolean, Numeric, Interval
 
 try:
     from src.database.db import Base
@@ -42,7 +42,8 @@ class Car(Base):
     updated_at = Column('updated_at', DateTime, default=func.now(), onupdate=func.now(), nullable=True)
     car = Column(String)
     public_id = Column(String)
-    description = Column(String, nullable=True)
+    black_list = Column(Boolean)
+    rate = Column(Float)
     entry_time = Column(DateTime) # Час заїзду
     exit_time = Column(DateTime) # Час виїзду
     license_plate = Column(String(10), unique=True, index=True) # Номерний знак авто
@@ -51,3 +52,4 @@ class Car(Base):
     
     comments = relationship("Comment", back_populates="car")
     user = relationship("User", back_populates="car")  
+    
