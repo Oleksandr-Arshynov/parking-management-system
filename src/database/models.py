@@ -1,5 +1,5 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, String, DateTime, func, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, func, ForeignKey, Boolean, Numeric, Interval
 
 try:
     from src.database.db import Base
@@ -36,13 +36,18 @@ class Role(Base):
 
 class Car(Base):
     __tablename__ = "cars"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     created_at = Column('created_at', DateTime, default=func.now(), nullable=True)
     updated_at = Column('updated_at', DateTime, default=func.now(), onupdate=func.now(), nullable=True)
     car = Column(String)
     public_id = Column(String)
     description = Column(String, nullable=True)
+    entry_time = Column(DateTime) # Час заїзду
+    exit_time = Column(DateTime) # Час виїзду
+    license_plate = Column(String(10), unique=True, index=True) # Номерний знак авто
+    parking_duration = Column(Interval) # Тривалість парковки
+    total_cost = Column(Numeric(10, 2)) # Фінальна ціна парковки
     
     comments = relationship("Comment", back_populates="car")
     user = relationship("User", back_populates="car")  
