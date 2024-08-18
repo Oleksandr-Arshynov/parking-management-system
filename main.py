@@ -8,11 +8,14 @@ from src.routes import routes_auth
 from src.routes import admin as routes_admin
 from src.routes import user as routes_user
 
+from src.routes import venicle as vehicle_router
+
 app = FastAPI()
 
 app.include_router(routes_auth.router, prefix="/api")
 app.include_router(routes_admin.router, prefix="/api")
 app.include_router(routes_user.router, prefix="/api")
+app.include_router(vehicle_router)
 
 @app.get("/", status_code=status.HTTP_200_OK)
 async def static(request: Request, db: Session = Depends(get_db)):
