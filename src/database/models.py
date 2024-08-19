@@ -23,7 +23,6 @@ class User(Base):
 
     role = relationship("Role", back_populates="user") 
     car = relationship("Car", back_populates="user")
-    comments = relationship("Comment", back_populates="user")
 
 
 class Role(Base):
@@ -50,6 +49,5 @@ class Car(Base):
     parking_duration = Column(Interval) # Тривалість парковки
     total_cost = Column(Numeric(10, 2)) # Фінальна ціна парковки
     
-    comments = relationship("Comment", back_populates="car")
     user = relationship("User", back_populates="car")  
     

@@ -1,11 +1,11 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import APIRouter, FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
 from src.database.models import Car
 from src.database.db import get_db
 
-app = FastAPI()
+router = APIRouter(prefix="/car", tags=["car"])
 
-@app.get("/car/{license_plate}")
+@router.get("/car/{license_plate}")
 def get_vehicle(license_plate: str, db: Session = Depends(get_db)):
     vehicle = db.query(Car).filter(Car.license_plate == license_plate).first()
     if vehicle is None:
