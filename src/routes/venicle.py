@@ -11,3 +11,4 @@ def get_vehicle(license_plate: str, db: Session = Depends(get_db)):
     if vehicle is None:
         raise HTTPException(status_code=404, detail="Vehicle not found")
     return vehicle
+

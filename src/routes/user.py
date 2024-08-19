@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 
 from sqlalchemy.orm import Session
 from src.database.db import get_db
-from src.database.models import User
+from src.database.models import Car, User
 from src.repository import user as repository_user
 from src.auth.dependencies_auth import auth_service
 
@@ -66,3 +66,4 @@ async def get_user_info(
     if user == None:
         raise HTTPException(status_code=404, detail="Username not found")
     return user
+

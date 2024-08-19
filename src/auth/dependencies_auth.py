@@ -51,7 +51,7 @@ class Auth:
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
-        logger.critical(credentials_exception)
+    
         try:
             payload = jose.jwt.decode(token, self.SECRET, algorithms=[self.ALGORITM])
         except jose.ExpiredSignatureError:
