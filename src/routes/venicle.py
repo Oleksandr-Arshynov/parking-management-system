@@ -7,7 +7,7 @@ router = APIRouter(prefix="/car", tags=["car"])
 
 @router.get("/car/{license_plate}")
 def get_vehicle(license_plate: str, db: Session = Depends(get_db)):
-    vehicle = db.query(Parking).filter(Parking.license_plate == license_plate).first()
+    vehicle = db.query(Parking).filter(Parking.plate == license_plate).first()
     if vehicle is None:
         raise HTTPException(status_code=404, detail="Vehicle not found")
     return vehicle

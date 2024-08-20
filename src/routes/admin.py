@@ -64,7 +64,7 @@ def is_admin(user: User):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions")
 
 def is_user(user: User):
-    if user.role.role != "user":
+    if user.role.role != "User":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions")
 
 # Admin Functions
@@ -121,22 +121,4 @@ def blacklist_vehicle(license_plate: str, db: Session = Depends(get_db), current
     db.commit()
     return {"detail": "Vehicle blacklisted successfully"}
 
-# User Functions
 
-@router.get("/my_plate", response_model=CarResponse)
-def get_user_plate(db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
-    is_user(current_user)
-    plate = db.query(Plate).filter(Plate.user_id == current_user.id).first()
-    if plate is None:
-        raise HTTPException(status_code=404, detail="No registered plate found")
-    
-    return plate
-
-@router.get("/parking_history", response_model=List[CarResponse])
-def get_parking_history(db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
-    is_user(current_user)
-    history = db.query(Parking).filter(Parking.user_id == current_user.id).all()
-    if not history:
-        raise HTTPException(status_code=404, detail="No parking history found")
-    
-    return history
