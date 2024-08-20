@@ -1,14 +1,8 @@
-from datetime import datetime, timedelta
-from typing import Optional
-from pydantic import BaseModel
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Boolean, Numeric, Interval, func
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, String, Float, DateTime, func, ForeignKey, Boolean, Numeric, Interval
+from sqlalchemy.ext.declarative import declarative_base
 
-try:
-    from src.database.db import Base
-except:
-    from database.db import Base
-
+Base = declarative_base()
 
 class User(Base):
     __tablename__ = "user"
@@ -21,37 +15,19 @@ class User(Base):
     role_id = Column(Integer, ForeignKey('role.id'), default=3)
     number_of_car = Column(String(255))
     refresh_token = Column(String(255), nullable=True)
-    created_at = Column('created_at', DateTime, default=func.now(), nullable=True)
-    updated_at = Column('updated_at', DateTime, default=func.now(), onupdate=func.now(), nullable=True)
+    created_at = Column(DateTime, default=func.now(), nullable=True)
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=True)
 
-    role = relationship("Role", back_populates="user") 
-
-
+    role = relationship("Role", back_populates="user")
+    parkings = relationship("Parking", back_populates="user")
+    plates = relationship("Plate", back_populates="user")
 
 class Role(Base):
     __tablename__ = "role"
     id = Column(Integer, primary_key=True)
     role = Column(String, nullable=False, unique=True)
 
-    user = relationship("User", back_populates="role") 
-
-
-class Parking(Base):
-    __tablename__ = "parking"
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
-    created_at = Column('created_at', DateTime, default=func.now(), nullable=True)
-    updated_at = Column('updated_at', DateTime, default=func.now(), onupdate=func.now(), nullable=True)
-    rate = Column(Float)
-    entry_time = Column(DateTime) # Час заїзду
-    exit_time = Column(DateTime) # Час виїзду
-    license_plate = Column(String(10), unique=True, index=True) # Номерний знак авто
-    parking_duration = Column(Interval) # Тривалість парковки
-    total_cost = Column(Numeric(10, 2)) # Фінальна ціна парковки
-    finish_parking = Column(Boolean, default=False)
-    
-    
-    plate = relationship("Plate", back_populates="plates")  
+    user = relationship("User", back_populates="role")
 
 class Plate(Base):
     __tablename__ = "plates"
@@ -62,3 +38,22 @@ class Plate(Base):
     total_cost = Column(Float)
     parking_limit = Column(Float, default=1000)
 
+    user = relationship("User", back_populates="plates")
+    parkings = relationship("Parking", back_populates="plate")
+
+class Parking(Base):
+    __tablename__ = "parking"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    plate_id = Column(Integer, ForeignKey('plates.id'))  # Adding ForeignKey to link with Plate
+    created_at = Column(DateTime, default=func.now(), nullable=True)
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=True)
+    rate = Column(Float)
+    entry_time = Column(DateTime)  # Час заїзду
+    exit_time = Column(DateTime)  # Час виїзду
+    parking_duration = Column(Interval)  # Тривалість парковки
+    total_cost = Column(Numeric(10, 2))  # Фінальна ціна парковки
+    finish_parking = Column(Boolean, default=False)
+    
+    user = relationship("User", back_populates="parkings")
+    plate = relationship("Plate", back_populates="parkings")

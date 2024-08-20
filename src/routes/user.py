@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 
 from sqlalchemy.orm import Session
 from src.database.db import get_db
-from src.database.models import Car, User
+from src.database.models import Parking, User
 from src.repository import user as repository_user
 from src.auth.dependencies_auth import auth_service
 

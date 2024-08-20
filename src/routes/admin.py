@@ -1,4 +1,4 @@
-from src.database.models import Car, User
+from src.database.models import User
 from typing import List
 from fastapi import (
     APIRouter,
@@ -20,10 +20,10 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 # Ендпоінт видалення користувача за ID
 @router.delete(
-    "/delete-user/{user_id}", dependencies=[Depends(auth_service.require_role())]
+    "/delete-plate/{license_plate}", dependencies=[Depends(auth_service.require_role())]
 )
 def delete_user(
-    user_id: int,
+    license_plate: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(auth_service.get_current_user),
 ):
@@ -51,48 +51,92 @@ def delete_user(
 
     return {"msg": f"Користувач {user.username} видалений"}
 
-
 from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.orm import Session
-from src.database.models import Car
 from src.database.db import get_db
-from pydantic import BaseModel
-from typing import List, Optional
-from datetime import datetime
+from src.database.models import User, Plate, Parking
+from src.schemas.car_schemas import CarCreate, CarResponse
 
-admin_router = APIRouter(prefix="/admin", tags=["admin"])
+router = APIRouter(prefix="/car", tags=["car"])
 
+def is_admin(user: User):
+    if user.role.role != "Admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions")
 
-# @admin_router.delete("/vehicles/{license_plate}", status_code=status.HTTP_204_NO_CONTENT)
-# def delete_vehicle(license_plate: str, db: Session = Depends(get_db)):
-#     vehicle = db.query(Car).filter(Car.license_plate == license_plate).first()
-#     if vehicle is None:
-#         raise HTTPException(status_code=404, detail="Vehicle not found")
-    
-#     db.delete(vehicle)
-#     db.commit()
-#     return {"detail": "Vehicle deleted successfully"}
+def is_user(user: User):
+    if user.role.role != "user":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions")
 
-# @admin_router.put("/vehicles/{license_plate}/rate", response_model=Car)
-# def update_parking_rate(license_plate: str, rate_update: ParkingRateUpdate, db: Session = Depends(get_db)):
-#     vehicle = db.query(Car).filter(Car.license_plate == license_plate).first()
-#     if vehicle is None:
-#         raise HTTPException(status_code=404, detail="Vehicle not found")
-    
-#     vehicle.rate = rate_update.rate
-    
-#     db.commit()
-#     db.refresh(vehicle)
-#     return vehicle
+# Admin Functions
 
-# @admin_router.put("/blacklist", status_code=status.HTTP_200_OK)
-# def update_blacklist_status(blacklist_update: BlacklistUpdate, db: Session = Depends(get_db)):
-#     vehicle = db.query(Car).filter(Car.license_plate == blacklist_update.license_plate).first()
-#     if vehicle is None:
-#         raise HTTPException(status_code=404, detail="Vehicle not found")
+@router.post("/add_plate", status_code=status.HTTP_201_CREATED)
+def add_plate(plate: CarCreate, db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
+    is_admin(current_user)
+    existing_plate = db.query(Plate).filter(Plate.license_plate == plate.license_plate).first()
+    if existing_plate:
+        raise HTTPException(status_code=400, detail="Vehicle with this license plate already exists")
     
-#     vehicle.black_list = blacklist_update.black_list
+    new_plate = Plate(
+        user_id=plate.user_id,
+        license_plate=plate.license_plate,
+        black_list=plate.black_list,
+        total_cost=plate.total_cost,
+        parking_limit=plate.parking_limit
+    )
+    db.add(new_plate)
+    db.commit()
+    db.refresh(new_plate)
+    return {"detail": "Plate added successfully"}
+
+@router.delete("/delete_plate/{license_plate}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_plate(license_plate: str, db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
+    is_admin(current_user)
+    plate = db.query(Plate).filter(Plate.license_plate == license_plate).first()
+    if plate is None:
+        raise HTTPException(status_code=404, detail="Vehicle not found")
     
-#     db.commit()
-#     db.refresh(vehicle)
-#     return {"detail": "Blacklist status updated", "license_plate": vehicle.license_plate, "black_list": vehicle.black_list}
+    db.delete(plate)
+    db.commit()
+    return {"detail": "Plate deleted successfully"}
+
+@router.put("/set_rate", status_code=status.HTTP_200_OK)
+def set_parking_rate(plate_id: int, rate: float, db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
+    is_admin(current_user)
+    plate = db.query(Parking).filter(Parking.id == plate_id).first()
+    if plate is None:
+        raise HTTPException(status_code=404, detail="Parking record not found")
+    
+    plate.rate = rate
+    db.commit()
+    return {"detail": "Parking rate updated successfully"}
+
+@router.put("/blacklist/{license_plate}", status_code=status.HTTP_200_OK)
+def blacklist_vehicle(license_plate: str, db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
+    is_admin(current_user)
+    plate = db.query(Plate).filter(Plate.license_plate == license_plate).first()
+    if plate is None:
+        raise HTTPException(status_code=404, detail="Vehicle not found")
+    
+    plate.black_list = True
+    db.commit()
+    return {"detail": "Vehicle blacklisted successfully"}
+
+# User Functions
+
+@router.get("/my_plate", response_model=CarResponse)
+def get_user_plate(db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
+    is_user(current_user)
+    plate = db.query(Plate).filter(Plate.user_id == current_user.id).first()
+    if plate is None:
+        raise HTTPException(status_code=404, detail="No registered plate found")
+    
+    return plate
+
+@router.get("/parking_history", response_model=List[CarResponse])
+def get_parking_history(db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
+    is_user(current_user)
+    history = db.query(Parking).filter(Parking.user_id == current_user.id).all()
+    if not history:
+        raise HTTPException(status_code=404, detail="No parking history found")
+    
+    return history
