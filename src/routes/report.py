@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import APIRouter, FastAPI, Depends
 from sqlalchemy.orm import Session
 from src.database.models import Parking
 from src.database.db import get_db
@@ -6,9 +6,10 @@ from fastapi.responses import StreamingResponse
 import csv
 import io
 
-app = FastAPI()
 
-@app.get("/generate-report/")
+router = APIRouter(prefix="/report", tags=["report"])
+
+@router.get("/generate-report/")
 def generate_report(db: Session = Depends(get_db)):
     vehicles = db.query(Parking).all()
 
