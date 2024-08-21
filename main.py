@@ -9,6 +9,9 @@ from src.routes import admin as routes_admin
 from src.routes import user as routes_user
 
 from src.routes import venicle as vehicle_router
+from src.routes import report
+from src.routes import message as message
+
 
 app = FastAPI()
 
@@ -16,6 +19,8 @@ app.include_router(routes_auth.router, prefix="/api")
 app.include_router(routes_admin.router, prefix="/api")
 app.include_router(routes_user.router, prefix="/api")
 app.include_router(vehicle_router.router, prefix="/api")
+app.include_router(report.app, prefix="/reports")
+app.include_routes(message.router, prefix='/api')
 
 @app.get("/", status_code=status.HTTP_200_OK)
 async def static(request: Request, db: Session = Depends(get_db)):
