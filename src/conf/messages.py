@@ -9,3 +9,5 @@ COMMENT_NOT_FOUND = "Comment not found"
 ACCESS_FORBIDDEN = "Access forbidden"
 CONTACT_NUMBER_EMAIL_EXISTS = "Contact with the mentioned email or contact number already exists"
 ACCESS_TOKEN_EXPIRE_MINUTES= 30
+PLATE_NOT_REGISTERED = "Plate is not registered"
+REACHED_PARKING_LIMIT = "You reached your parking cost limit"

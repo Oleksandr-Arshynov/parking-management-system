@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request, Depends, HTTPException, status
 
 from src.database.db import get_db
 from src.database.models import User, Role
-from src.routes import routes_auth
+from src.routes import parking, routes_auth
 from src.routes import admin as routes_admin
 from src.routes import user as routes_user
 
@@ -21,6 +21,7 @@ app.include_router(routes_user.router, prefix="/api")
 app.include_router(vehicle_router.router, prefix="/api")
 app.include_router(report.router, prefix="/reports")
 app.include_router(message.router, prefix='/api')
+app.include_router(parking.router, prefix="/api")
 
 @app.get("/", status_code=status.HTTP_200_OK)
 async def static(request: Request, db: Session = Depends(get_db)):
