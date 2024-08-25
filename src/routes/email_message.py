@@ -5,21 +5,10 @@ from src.database.db import get_db
 from fastapi.responses import JSONResponse
 
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from src.auth.dependencies_auth import conf
 
 router = APIRouter(prefix="/message-email", tags=["message-email"])
-
-# conf налаштовано під gmail, потрібно внести свої дані
-conf = ConnectionConfig(
-    MAIL_USERNAME="your_username", 
-    MAIL_PASSWORD="your_password", 
-    MAIL_FROM="your_email@gmail.com", 
-    MAIL_PORT=587,
-    MAIL_SERVER="smtp.gmail.com",
-    MAIL_STARTTLS=True,
-    MAIL_SSL_TLS=False, 
-    #MAIL_TLS=True,
-    #MAIL_SSL=False,
-    )                  # For Outlook and other servers ---- change MAIL_TLS=False and MAIL_SSL=True
+                # For Outlook and other servers ---- change MAIL_TLS=False and MAIL_SSL=True
 
 def send_email(subject: str, email_to: str, body: str):
     message = MessageSchema(
