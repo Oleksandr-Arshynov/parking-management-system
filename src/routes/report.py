@@ -18,7 +18,7 @@ def generate_report(db: Session = Depends(get_db)):
     writer.writerow(['ID', 'Номерний знак', 'Власник', 'Час вʼїзду', 'Час виїзду', 'Тривалість паркування', 'Загальна вартість'])
 
     for vehicle in vehicles:
-        writer.writerow([vehicle.id, vehicle.license_plate, vehicle.user_id, vehicle.entry_time, vehicle.exit_time, vehicle.parking_duration, vehicle.total_cost])
+        writer.writerow([vehicle.id, vehicle.plate_id, vehicle.user_id, vehicle.entry_time, vehicle.exit_time, vehicle.parking_duration, vehicle.total_cost])
 
     output.seek(0)
     return StreamingResponse(output, media_type="text/csv", headers={"Content-Disposition": "attachment; filename=report.csv"})

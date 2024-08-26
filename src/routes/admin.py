@@ -14,6 +14,7 @@ from src.conf.config import settings
 import cloudinary.uploader
 from src.conf import messages
 from src.auth.dependencies_auth import auth_service
+from src.repository import user as repository_user
 
 
 router = APIRouter(prefix="/admin", tags=["admin"])
@@ -102,7 +103,7 @@ def delete_plate(license_plate: str, db: Session = Depends(get_db), current_user
 @router.put("/set_rate", status_code=status.HTTP_200_OK)
 def set_parking_rate(plate_id: int, rate: float, db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
     is_admin(current_user)
-    plate = db.query(Parking).filter(Parking.id == plate_id).first()
+    plate = db.query(Parking).filter(Parking.id == plate_id, Parking.finish_parking == False).first()
     if plate is None:
         raise HTTPException(status_code=404, detail="Parking record not found")
     
@@ -116,9 +117,21 @@ def blacklist_vehicle(license_plate: str, db: Session = Depends(get_db), current
     plate = db.query(Plate).filter(Plate.license_plate == license_plate).first()
     if plate is None:
         raise HTTPException(status_code=404, detail="Vehicle not found")
-    
-    plate.black_list = True
-    db.commit()
-    return {"detail": "Vehicle blacklisted successfully"}
+    if plate.black_list == True:   
+        plate.black_list = False
+        db.commit()
+        return {"detail": "Vehicle unblacklisted successfully"}
+    elif plate.black_list == False:
+        plate.black_list = True
+        db.commit()
+        return {"detail": "Vehicle blacklisted successfully"}
 
+
+@router.post("/{username}")
+async def get_user_info(username: str,db: Session = Depends(get_db),current_user: User = Depends(auth_service.get_current_user),):
+    is_admin(current_user)
+    user = await repository_user.get_username(username, db)
+    if user == None:
+        raise HTTPException(status_code=404, detail="Username not found")
+    return user
 
