@@ -42,5 +42,6 @@ async def parking_exit(parking_id:int, db: Session):
     if found_plate.total_cost > found_plate.parking_limit:
         raise HTTPException(status_code=402, detail=messages.REACHED_PARKING_LIMIT)
     
+    db.commit()
 
     return found_parking.id

@@ -24,17 +24,6 @@ async def get_me_info(
 
 
 # OK
-@router.post("/{username}")
-async def get_user_info(
-    username: str,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(auth_service.get_current_user),
-):
-   
-    user = await repository_user.get_username(username, db)
-    if user == None:
-        raise HTTPException(status_code=404, detail="Username not found")
-    return user
 
 # User Functions
 

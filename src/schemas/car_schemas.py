@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 
 class VehicleBase(BaseModel):
     license_plate: str
@@ -25,13 +25,12 @@ class CarCreate(BaseModel):
 
 class CarResponse(BaseModel):
     id: int
-    license_plate: str
     user_id: int
     plate_id: int
     entry_time: Optional[datetime]
     exit_time: Optional[datetime]
     rate: float
-    parking_duration: Optional[datetime]
+    parking_duration: Optional[timedelta]
     total_cost: Optional[float]
     finish_parking: Optional[bool]
     

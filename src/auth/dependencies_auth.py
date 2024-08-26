@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+import json
 from pathlib import Path
 from fastapi import logger
 from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
@@ -103,6 +104,10 @@ class Auth:
         db.commit()
 
     def create_email_token(self, data: dict):
+        try:
+            json.dumps(data)
+        except TypeError as e:
+            print(f"Serialization error: {e}")
         to_encode = data.copy()
         expire = datetime.utcnow() + timedelta(days=7)
         to_encode.update({"iat": datetime.utcnow(), "exp": expire})

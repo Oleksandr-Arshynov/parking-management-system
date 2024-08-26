@@ -10,7 +10,6 @@ from src.routes import user as routes_user
 
 from src.routes import venicle as vehicle_router
 from src.routes import report
-from src.routes import message as message
 from src.routes import email_message as email_message
 
 
@@ -21,7 +20,6 @@ app.include_router(routes_admin.router, prefix="/api")
 app.include_router(routes_user.router, prefix="/api")
 app.include_router(vehicle_router.router, prefix="/api")
 app.include_router(report.router, prefix="/reports")
-app.include_router(message.router, prefix='/api')
 app.include_router(parking.router, prefix="/api")
 app.include_router(email_message.router, prefix='/api')
 
