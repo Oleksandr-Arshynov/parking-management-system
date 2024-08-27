@@ -8,8 +8,6 @@ from fastapi_mail.errors import ConnectionErrors
 from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
 
 from src.auth.dependencies_auth import auth_service
-
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from src.auth.dependencies_auth import conf
 from src.routes.admin import is_admin
 
@@ -51,6 +49,17 @@ async def send_email(email: str, username: str, host: str):
 
 @router.get("/check-cost-email/{license_plate}")
 async def check_parking_cost(license_plate: str, db: Session = Depends(get_db), current_user: User = Depends(auth_service.get_current_user)):
+    """
+    Checks if the parking cost for a given license plate exceeds the limit and sends an email notification if it does.
+
+    Args:
+        license_plate (str): The license plate of the vehicle.
+        db (Session, optional): SQLAlchemy database session. Defaults to Depends(get_db).
+        current_user (User, optional): The current authenticated user. Defaults to Depends(auth_service.get_current_user).
+
+    Returns:
+        dict: A message indicating whether the parking cost exceeded the limit and if an email was sent.
+    """
     is_admin(current_user)
     vehicle = db.query(Plate).filter(Plate.license_plate == license_plate).first()
     plate_ovner = db.query(User).filter(User.id == vehicle.user_id).first()

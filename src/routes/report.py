@@ -11,6 +11,15 @@ router = APIRouter(prefix="/report", tags=["report"])
 
 @router.get("/generate-report/")
 def generate_report(db: Session = Depends(get_db)):
+    """
+    Generates a CSV report of all parking records and returns it as a downloadable file.
+
+    Args:
+        db (Session, optional): SQLAlchemy database session. Defaults to Depends(get_db).
+
+    Returns:
+        StreamingResponse: A CSV file attachment containing the parking report.
+    """
     vehicles = db.query(Parking).all()
 
     output = io.StringIO()
