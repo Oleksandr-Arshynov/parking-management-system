@@ -1,3 +1,4 @@
+![обкладинка](logo.jpeg)
 # Parking Management System
 
 ## Overview
