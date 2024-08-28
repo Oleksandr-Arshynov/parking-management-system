@@ -35,15 +35,18 @@ The Parking Management System is a web application designed to manage and monito
 
    ```bash
    git clone https://github.com/Oleksandr-Arshynov/parking-management-system
-   cd parking-management-system
 
-2. python -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+2. poetry shell
 
 3. poetry install
 
-4. docker-compose up --build
+4. cd src
 
+5. docker-compose up --build
+
+6. cd ..
+
+7. uvicorn main:app --reload
 
 ## Usage
 Start the server:
