@@ -31,7 +31,7 @@ async def get_image(file: UploadFile, db: Session = Depends(get_db),):
         if parking:
             exit = await parking_exit(parking.id, db)
             return exit 
-        else:
+        elif not parking:
             enter = await parking_entry(plate.id, db)
             return enter 
 

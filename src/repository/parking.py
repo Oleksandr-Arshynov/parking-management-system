@@ -16,7 +16,6 @@ async def parking_entry(plate_id: int, db: Session):
         plate_id= plate_id,  # Replace with actual plate_id
         rate=20,  # Replace with actual rate
         entry_time=datetime.now(),  # Replace with actual entry time
-        exit_time=datetime.now(),  # Replace with actual exit time
         parking_duration=None,  # Calculate and set parking duration
         total_cost=0.0,  # Calculate and set total cost
         finish_parking=False  # Replace with actual finish_parking status

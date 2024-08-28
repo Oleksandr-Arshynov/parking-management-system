@@ -1,40 +1,37 @@
 import cv2
-from matplotlib import pyplot as plt
+from paddleocr import PaddleOCR
+import re
+import matplotlib.pyplot as plt
 import numpy as np
-import imutils
-import easyocr
 
+def validate_ukraine_plate(text):
+    pattern = r'^[A-Z]{2}\d{4}[A-Z]{2}$'
+    return bool(re.match(pattern, text))
 
-def get_plate_number(car_img):
+# Extract license plate text using PaddleOCR
+def get_plate_number(image):
+    
+    ocr = PaddleOCR(use_angle_cls=True, lang='en')
+    #image = cv2.imread(image_path)
 
-    gray = cv2.cvtColor(car_img, cv2.COLOR_BGR2GRAY)
-    #plt.imshow(cv2.cvtColor(gray, cv2.COLOR_BGR2RGB))
+    # Check if the image is loaded correctly
+    if image is None:
+        print(f"Error: Image could not be loaded.")
+        return None
 
-    bfilter = cv2.bilateralFilter(gray, 11, 17, 17) #Noise reduction
-    edged = cv2.Canny(bfilter, 30, 200) #Edge detection
-    #plt.imshow(cv2.cvtColor(edged, cv2.COLOR_BGR2RGB))
+    # OCR
+    result = ocr.ocr(image)
 
-    keypoints = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    contours = imutils.grab_contours(keypoints)
-    contours = sorted(contours, key=cv2.contourArea, reverse=True)[:10]
+    for line in result:
+        for word_info in line:
+            text = word_info[1][0]
+            text = text.strip().replace('\n', '').replace(' ', '')
 
-    location = None
-    for contour in contours:
-        approx = cv2.approxPolyDP(contour, 10, True)
-        if len(approx) == 4:
-            location = approx
-            break
+            if validate_ukraine_plate(text):
+                print(f"Detected License Plate: {text}")
+                return text
+            return text
+            #else:
+            #    print(f"Invalid License Plate format: {text}")
 
-    mask = np.zeros(gray.shape, np.uint8)
-    new_image = cv2.drawContours(mask, [location], 0,255, -1)
-    new_image = cv2.bitwise_and(car_img, car_img, mask=mask)
-
-    (x,y) = np.where(mask==255)
-    (x1, y1) = (np.min(x), np.min(y))
-    (x2, y2) = (np.max(x), np.max(y))
-    cropped_image = gray[x1:x2+1, y1:y2+1]
-
-    reader = easyocr.Reader(['en'])
-    result = reader.readtext(cropped_image)
-    text = result[0][-2]
-    return(text)
+    return None

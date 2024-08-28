@@ -31,7 +31,7 @@ imutils = "^0.5.4"
 easyocr = "^1.7.1"
 torch = "2.0.0"
 matplotlib = "^3.9.2"
-numpy = "^2.1.0"
+paddleocr = "^2.8.1"
 
 
 
