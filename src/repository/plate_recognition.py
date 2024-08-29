@@ -84,11 +84,10 @@ def extract_plate(img, plate_cascade):
 
     return plate_rect, plate
 
-# Відповідність контурів номерному або символьному шаблону
 def find_contours(dimensions, img):
 
     # Define the minimum width threshold for character contours
-    i_width_threshold = 6 
+    i_width_threshold = 5 
 
     # Find contours in the image
     cntrs, _ = cv2.findContours(img.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -100,69 +99,33 @@ def find_contours(dimensions, img):
     upper_height = dimensions[3]
     upper_height = dimensions[3]
 
-    # Sort the contours by their area in descending order and limit to the first 16 contours
-    cntrs = sorted(cntrs, key=cv2.contourArea, reverse=True)[:16]
 
-    # Create a 3-channel image for drawing bounding rectangles
-    ii = np.dstack([img] * 3)
-
-    # Initialize a list to store the x-coordinates of the contours
     x_cntr_list = []
-
-    # Initialize a list to store the cropped character images
-    img_res = []
-
-    # Iterate through each contour
+    img_res_char = []
     for cntr in cntrs:
-
-        # Get the bounding rectangle of the contour
         intX, intY, intWidth, intHeight = cv2.boundingRect(cntr)
-
-        # Check if the contour meets the width and height thresholds
         if (intWidth >= i_width_threshold and intWidth < upper_width and intHeight > lower_height and intHeight < upper_height):
-            # Append the x-coordinate of the contour to the list
-            x_cntr_list.append(intX)
+            x_cntr_list.append((intX, intWidth, img[intY:intY + intHeight, intX:intX + intWidth]))
+    # Сортування контурів за координатою X
+    x_cntr_list = sorted(x_cntr_list, key=lambda item: item[0])
+    for (intX, intWidth, char) in x_cntr_list:
+        if intWidth >= i_width_threshold and intWidth < lower_width:
+            i_char = cv2.resize(char, (intWidth, 42), interpolation=cv2.INTER_LINEAR_EXACT)
+            char = np.full((42, 22), 255, dtype=np.uint8)
+            begin = int((22 - intWidth) / 2)
+            char[:, begin:begin + intWidth] = i_char[:, :]
+        else:
+            char = cv2.resize(char, (22, 42), interpolation=cv2.INTER_LINEAR_EXACT)
+        char = cv2.subtract(255, char)
+        char[0:1, :] = 0
+        char[:, 0:1] = 0
+        char[43:44, :] = 0
+        char[:, 23:24] = 0
+        img_res_char.append(char)
 
-            # Crop the character image from the original image
-            char = img[intY:intY + intHeight, intX:intX + intWidth]
 
-            # Check if the character image width is within the lower width threshold
-            if (intWidth >= i_width_threshold and intWidth < lower_width):
-                # Resize the character image to a fixed width and height
-                i_char = cv2.resize(char, (intWidth, 42), interpolation=cv2.INTER_LINEAR_EXACT)
-
-                # Create a new image with a white background
-                char = np.full((42, 22), 255, dtype=np.uint8)
-
-                # Calculate the starting x-coordinate for placing the resized character image
-                begin = int((22 - intWidth) / 2)
-
-                # Place the resized character image on the new image
-                char[:, begin:begin + intWidth] = i_char[:, :]
-            else:
-                # Resize the character image to a fixed width and height
-                char = cv2.resize(char, (22, 42), interpolation=cv2.INTER_LINEAR_EXACT)
-
-            # Draw a bounding rectangle around the character image
-            cv2.rectangle(ii, (intX, intY), (intWidth + intX, intY + intHeight), (50, 21, 200), 2)
-            
-            
-            # Invert the colors of the character image
-            char = cv2.subtract(255, char)
-
-            # Set the top and bottom borders of the character image to white
-            char[0:1, :] = 0
-            char[:, 0:1] = 0
-            # Set the left and right borders of the character image to white
-            char[43:44, :] = 0
-            char[:, 23:24] = 0
-            # Append the cropped character image to the list
-            img_res.append(char)
-        # Break the loop if the number of cropped character images reaches 10
-        if len(img_res) >= 10:
-            break
     # Return the list of cropped character images
-    return img_res
+    return img_res_char
 
 
 # Find characters in the resulting images
@@ -219,11 +182,19 @@ def fix_dimension(img):
 
 # Predicting the output string number by contours
 def predict_result(ch_contours, model):
-
+    # Додавання кириличних символів у словник
+    
+    
+    
+    
+    
 
     # Create a dictionary to map the model's output indices to the corresponding characters
     dic = {}
-    characters = '#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    characters = '#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZАВЕКМНОРСТУХ'
+
+
+    dic = {}
     for i,c in enumerate(characters):
         dic[i] = c
 
@@ -258,6 +229,7 @@ def predict_result(ch_contours, model):
     return plate_number
 
 
+import easyocr
 
 
 def get_plate_number(img_avto):
@@ -267,7 +239,6 @@ def get_plate_number(img_avto):
     # Extract the license plate from the original image
     output_img, num_img = extract_plate(img, plate_cascade)
 
-    
     # Segment the characters in the extracted license plate
     chars = segment_to_contours(num_img)
 

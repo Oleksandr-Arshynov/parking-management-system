@@ -24,6 +24,7 @@ async def get_image(file: UploadFile, db: Session = Depends(get_db),):
     plate = db.query(Plate).filter(Plate.license_plate == plate_recognized).first()
     
     if plate is None:
+        return plate_recognized
         raise HTTPException(status_code=404, detail=messages.PLATE_NOT_REGISTERED)
     elif plate:
         parking = db.query(Parking).filter(Parking.plate_id == plate.id, Parking.finish_parking == False).first()

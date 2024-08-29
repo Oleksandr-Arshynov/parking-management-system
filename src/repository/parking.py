@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from src.database.models import User
 from sqlalchemy.ext.declarative import declarative_base
 from src.database.models import Parking, Plate
+from src.routes.email_message import send_email
 
 from src.conf import messages
 
@@ -36,9 +37,11 @@ async def parking_exit(parking_id:int, db: Session):
     found_plate = db.query(Plate).filter(Plate.id == found_parking.plate_id).first()
     found_plate.total_cost = found_plate.total_cost + found_parking.total_cost
     
+    plate_ovner = db.query(User).filter(User.id == found_parking.user_id).first()
     db.commit()
 
     if found_plate.total_cost > found_plate.parking_limit:
+        await send_email(email=plate_ovner.email,username=plate_ovner.username,host = 'Check' )# email of the vehicle owner)
         raise HTTPException(status_code=402, detail=messages.REACHED_PARKING_LIMIT)
     
     db.commit()
