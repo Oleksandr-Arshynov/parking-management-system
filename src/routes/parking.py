@@ -17,6 +17,19 @@ router = APIRouter(prefix="/parking", tags=["parking"])
 
 @router.post("/get_image/")
 async def get_image(file: UploadFile, db: Session = Depends(get_db),):
+    """
+Uploads an image for license plate recognition and manages parking entries or exits based on the recognized plate.
+
+Args:
+    file (UploadFile): The image file containing the vehicle's license plate.
+    db (Session, optional): SQLAlchemy database session. Defaults to Depends(get_db).
+
+Returns:
+    Response: The image with the recognized license plate highlighted, if successful.
+    str: The recognized license plate if it is not registered.
+    Raises:
+        HTTPException: If the license plate is not registered in the database.
+"""
     content = await file.read()    
     nparr = np.fromstring(content, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)

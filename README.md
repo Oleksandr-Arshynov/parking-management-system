@@ -120,6 +120,10 @@ Generates a CSV report of all parking records.
 Email Endpoints
 Check Parking Cost and Send Email
 
+# POST /get_image/
+
+This endpoint allows users to upload an image for license plate recognition and manage parking entries and exits based on the recognized plate.
+
 # GET /message-email/check-cost-email/{license_plate}
 
 Checks if the parking cost for a vehicle has exceeded the limit and sends an email notification.
