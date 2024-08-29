@@ -24,17 +24,15 @@ async def get_image(file: UploadFile, db: Session = Depends(get_db),):
     plate = db.query(Plate).filter(Plate.license_plate == plate_recognized).first()
     
     if plate is None:
-        return plate_img
-        return {"filename": plate_recognized}
         raise HTTPException(status_code=404, detail=messages.PLATE_NOT_REGISTERED)
     elif plate:
         parking = db.query(Parking).filter(Parking.plate_id == plate.id, Parking.finish_parking == False).first()
         if parking:
             exit = await parking_exit(parking.id, db)
-            return exit 
+            return plate_img
         elif not parking:
             enter = await parking_entry(plate.id, db)
-            return enter 
+            return plate_img
 
 
 
