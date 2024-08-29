@@ -42,11 +42,13 @@ The Parking Management System is a web application designed to manage and monito
 
 4. cd src
 
-5. docker-compose up --build
+5. alembic upgrade head
 
-6. cd ..
+6. docker-compose up --build
 
-7. uvicorn main:app --reload
+7. cd ..
+
+8. uvicorn main:app --reload
 
 ## Usage
 Start the server:
